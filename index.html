@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Upload</title>
+    <style>
+        /* General Body Styling with Fade-Out Background */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, rgba(52, 152, 219, 0.8), rgba(244, 247, 246, 1)); /* Fade from blue to light grey */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+            padding-top: 40px; /* Space from top */
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 550px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 40px; /* Space at the bottom */
+        }
+
+        /* Header Styling */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: #2c3e50; /* Dark blue for heading */
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #7f8c8d; /* Grey for sub-text */
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        /* Form Styling */
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Space between form groups */
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            font-size: 1em;
+            color: #333;
+            box-sizing: border-box; /* Include padding in width */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="file"]:focus {
+            border-color: #3498db; /* Blue on focus */
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        /* Specific styling for file input to make it look better */
+        input[type="file"] {
+            padding: 10px; /* Adjust padding for file input */
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        /* Image Preview */
+        .image-preview-container {
+            margin-top: 20px;
+            text-align: center;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #fdfdfd;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 250px; /* Limit preview height */
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-align: center;
+            text-decoration: none; /* For anchor buttons */
+            display: inline-block; /* For anchor buttons */
+        }
+
+        .btn-primary {
+            background-color: #2ecc71; /* Green for primary action */
+            color: white;
+            font-weight: bold;
+            margin-top: 10px; /* Space above button */
+        }
+
+        .btn-primary:hover {
+            background-color: #27ae60; /* Darker green on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        /* Flash Messages (if you implement them in app.py) */
+        .flash-message {
+            background-color: #e74c3c; /* Red for error */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        /* Example for success flash message */
+        .flash-message.success {
+            background-color: #2ecc71; /* Green for success */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Upload Certificate</h1>
+            <p>Please fill in the details and upload your certificate image.</p>
+        </header>
+
+        <form id="uploadForm" method="POST" enctype="multipart/form-data" class="upload-form">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="text" name="id" id="id" placeholder="Enter ID" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" placeholder="Enter Name" required>
+            </div>
+            <div class="form-group">
+                <label for="course">Course</label>
+                <input type="text" name="course" id="course" placeholder="Enter Course" required>
+            </div>
+            <div class="form-group">
+                <label for="college">College</label>
+                <input type="text" name="college" id="college" placeholder="Enter College" required>
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" name="date" id="date" required>
+            </div>
+            <div class="form-group">
+                <label for="certificate">Certificate Image</label>
+                <input type="file" name="certificate" id="certificate" accept=".jpg, .jpeg, .png" required onchange="previewImage(event)">
+            </div>
+            
+            <div class="image-preview-container">
+                <img id="preview" src="#" alt="Image Preview" class="image-preview" style="display:none;">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Upload Certificate</button>
+        </form>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
