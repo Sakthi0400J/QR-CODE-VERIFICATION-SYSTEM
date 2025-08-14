@@ -1,0 +1,45 @@
+<!-- templates/display_certificate.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate with QR Code</title>
+    <style>
+        /* Add CSS to control the size of the image */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, rgba(52, 152, 219, 0.8), rgba(244, 247, 246, 1)); /* Fade from blue to light grey */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+            padding-top: 40px; /* Space from top */
+        }
+        img {
+            max-width: 50%;  /* Make the image responsive */
+            height: auto;     /* Maintain aspect ratio */
+            width: auto;      /* Allow width to adjust */
+        }
+        .container {
+            text-align: center; /* Center the content */
+            margin: 20px;      /* Add some margin */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generated Certificate</h1>
+        <img src="{{ img_data }}" alt="Certificate with QR Code">
+        <br>
+        <a href="{{ img_data }}" download="certificate_with_qr.jpg">
+            <button>Download Certificate</button>
+        </a>
+        <br>
+        <a href="{{ url_for('upload_file') }}">Upload another certificate</a>
+    </div>
+</body>
+</html>
